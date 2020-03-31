@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Mikael Magtesyan](https://up.htmlacademy.ru/ecmascript/11/user/1100875).
-* Наставник: `Неизвестно`.
+* Студент: [Mikael Magtesyan](https://htmlacademy.ru/profile/id1100875)
+* Наставник: [Андрей Фидельман](https://htmlacademy.ru/profile/id773165)
 
 ---
 
