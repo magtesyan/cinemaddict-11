@@ -1,4 +1,4 @@
-const ESC_KEY = 'Escape';
+const ESC_KEY = `Escape`;
 
 const FILMS_PROD_END_YEAR = 2020;
 const FILMS_PROD_START_YEAR = 1922;
