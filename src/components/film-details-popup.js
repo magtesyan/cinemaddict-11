@@ -22,7 +22,7 @@ const createFilmDetailsPopupTemplate = (filmCard) => {
   const {name, originalName, rating, date, duration, genre, poster, description, comments, ageLimit, director, writer, actor, country} = filmCard;
   const commentsLength = comments ? comments.length : 0;
 
-  let genreBlock = Array.from(genre).reduce((block, current) => {
+  const genreBlock = Array.from(genre).reduce((block, current) => {
     block += `<span class="film-details__genre">${current}</span>\n`;
     return block;
   }, ``);
