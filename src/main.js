@@ -55,7 +55,7 @@ const showMore = (siteFilmsListSection, siteFilmsListContainer) => {
   const loadMoreButton = siteFilmsListSection.querySelector(`.films-list__show-more`);
   addListenerOnPoster(0, SHOWING_FILMS_COUNT_ON_START);
 
-  loadMoreButton.addEventListener(`click`, () => {
+  const onShowMoreBtnClick = () => {
     const prevFilmsCount = showingFilmsCount;
     showingFilmsCount = Math.min(showingFilmsCount + SHOWING_FILM_COUNT_BY_BUTTON, FILM_CARD_COUNT);
 
@@ -66,7 +66,9 @@ const showMore = (siteFilmsListSection, siteFilmsListContainer) => {
     if (showingFilmsCount >= FILM_CARD_COUNT) {
       loadMoreButton.remove();
     }
-  });
+  };
+
+  loadMoreButton.addEventListener(`click`, onShowMoreBtnClick);
 };
 
 const render = (container, template, place = `beforeend`) => {
