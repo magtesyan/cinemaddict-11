@@ -87,7 +87,7 @@ const generateFilm = () => {
     originalName: name,
     poster: nameItems[name],
     description,
-    comments: Math.random() > 0.2 ? generateComments(getRandomIntegerNumber(1, 5)) : 0,
+    comments: Math.random() > 0.2 ? generateComments(getRandomIntegerNumber(1, 5)) : [],
     rating: (Math.random(2) * 10).toFixed(1),
     year: date.getFullYear(),
     duration: `${getRandomIntegerNumber(1, 2)}h ${getRandomIntegerNumber(1, 59)}m`,

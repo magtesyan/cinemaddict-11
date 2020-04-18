@@ -1,3 +1,5 @@
+import {createElement} from "../util.js";
+
 const createExtraBlockTemplate = (title) => {
   return (
     `<section class="films-list--extra">
@@ -9,4 +11,27 @@ const createExtraBlockTemplate = (title) => {
   );
 };
 
-export {createExtraBlockTemplate};
+class ExtraBlock {
+  constructor(title) {
+    this._element = null;
+    this._title = title;
+  }
+
+  getTemplate() {
+    return createExtraBlockTemplate(this._title);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default ExtraBlock;

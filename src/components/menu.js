@@ -1,4 +1,5 @@
 import {generateFilters} from "../mock/filter.js";
+import {createElement} from "../util.js";
 
 const createFiltersMarkup = (filter, isActive) => {
   const {name, count} = filter;
@@ -19,23 +20,31 @@ const createMenuTemplate = (films) => {
         ${filtersMarkup}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
-    </nav>
-
-    <ul class="sort">
-      <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-      <li><a href="#" class="sort__button">Sort by date</a></li>
-      <li><a href="#" class="sort__button">Sort by rating</a></li>
-    </ul>
-
-    <section class="films">
-      <section class="films-list">
-        <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-
-        <div class="films-list__container">
-        </div>
-      </section>
-    </section>`
+    </nav>`
   );
 };
 
-export {createMenuTemplate};
+class Menu {
+  constructor(films) {
+    this._films = films;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._films);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default Menu;

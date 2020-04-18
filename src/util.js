@@ -1,5 +1,11 @@
 import {MONTHS, DAYS_IN_MONTH, MONTHS_IN_YEAR, FILMS_PROD_START_YEAR, FILMS_PROD_END_YEAR} from "./const.js";
 
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min + 1));
 };
@@ -33,4 +39,22 @@ const makeSet = (array) => {
   return newSet;
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet};
+const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, RenderPosition, render, createElement};
