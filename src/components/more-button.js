@@ -1,4 +1,3 @@
-
 import AbstractComponent from "./abstract-component.js";
 
 const createMoreButtonTemplate = () => {
@@ -10,6 +9,10 @@ const createMoreButtonTemplate = () => {
 class MoreButton extends AbstractComponent {
   getTemplate() {
     return createMoreButtonTemplate();
+  }
+
+  setClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
   }
 }
 

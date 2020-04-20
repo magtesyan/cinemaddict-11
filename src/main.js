@@ -21,7 +21,7 @@ const renderFilmCards = (section, films, startNum, endNum) => {
     const onCloseFilmDetailsPopup = () => {
       removeChild(siteMain, filmDetailsPopupComponent);
 
-      filmDetailsCloseBtn.removeEventListener(`click`, onCloseFilmDetailsPopup);
+      filmDetailsPopupComponent.removeClickHandler(onCloseFilmDetailsPopup);
       document.removeEventListener(`keydown`, function (evt) {
         if (evt.key === ESC_KEY) {
           onCloseFilmDetailsPopup();
@@ -32,8 +32,7 @@ const renderFilmCards = (section, films, startNum, endNum) => {
     const filmDetailsPopupComponent = new FilmDetailsPopupComponent(film);
     appendChild(siteMain, filmDetailsPopupComponent);
 
-    const filmDetailsCloseBtn = filmDetailsPopupComponent.getElement().querySelector(`.film-details__close-btn`);
-    filmDetailsCloseBtn.addEventListener(`click`, onCloseFilmDetailsPopup);
+    filmDetailsPopupComponent.setClickHandler(onCloseFilmDetailsPopup);
 
     document.addEventListener(`keydown`, function (evt) {
       if (evt.key === ESC_KEY) {
@@ -49,8 +48,7 @@ const renderFilmCards = (section, films, startNum, endNum) => {
     const filmCardComponent = new FilmCardComponent(film);
     render(siteFilmsListContainer, filmCardComponent, RenderPosition.BEFOREEND);
 
-    const poster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
-    poster.addEventListener(`click`, function () {
+    filmCardComponent.setClickHandler(() => {
       onPosterClick(film);
     });
   });
@@ -73,7 +71,7 @@ if (filmCards.length !== 0) {
   render(siteFilmsSection.querySelector(`.films-list`), moreButton, RenderPosition.BEFOREEND);
   let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
 
-  moreButton.getElement().addEventListener(`click`, () => {
+  moreButton.setClickHandler(() => {
     const prevFilmsCount = showingFilmsCount;
     showingFilmsCount = prevFilmsCount + SHOWING_FILM_COUNT_BY_BUTTON;
 
