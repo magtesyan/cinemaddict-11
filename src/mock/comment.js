@@ -1,4 +1,4 @@
-import {getRandomArrayItem} from "../util.js";
+import {getRandomArrayItem} from "../utils/common.js";
 
 const texts = [
   `Interesting setting and a good cast`,

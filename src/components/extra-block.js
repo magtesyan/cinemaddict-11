@@ -1,4 +1,4 @@
-import {createElement} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createExtraBlockTemplate = (title) => {
   return (
@@ -11,26 +11,14 @@ const createExtraBlockTemplate = (title) => {
   );
 };
 
-class ExtraBlock {
+class ExtraBlock extends AbstractComponent {
   constructor(title) {
-    this._element = null;
+    super();
     this._title = title;
   }
 
   getTemplate() {
     return createExtraBlockTemplate(this._title);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

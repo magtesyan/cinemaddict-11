@@ -1,4 +1,5 @@
-import {createElement, getRandomIntegerNumber} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
+import {getRandomIntegerNumber} from "../utils/common.js";
 
 const createFooterStatsTemplate = (films) => {
   const filmsCount = films.length ? new Intl.NumberFormat(`ru`).format(getRandomIntegerNumber(10000, 500000)) : 0;
@@ -9,26 +10,14 @@ const createFooterStatsTemplate = (films) => {
 };
 
 
-class FooterStats {
+class FooterStats extends AbstractComponent {
   constructor(films) {
+    super();
     this._films = films;
-    this._element = null;
   }
 
   getTemplate() {
     return createFooterStatsTemplate(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

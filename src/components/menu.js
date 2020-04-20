@@ -1,5 +1,5 @@
 import {generateFilters} from "../mock/filter.js";
-import {createElement} from "../util.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createFiltersMarkup = (filter, isActive) => {
   const {name, count} = filter;
@@ -24,26 +24,14 @@ const createMenuTemplate = (films) => {
   );
 };
 
-class Menu {
+class Menu extends AbstractComponent {
   constructor(films) {
+    super();
     this._films = films;
-    this._element = null;
   }
 
   getTemplate() {
     return createMenuTemplate(this._films);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

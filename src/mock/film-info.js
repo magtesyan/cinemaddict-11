@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet} from "../util.js";
+import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet} from "../utils/common.js";
 import {generateComments} from "./comment.js";
 
 const nameItems = {
