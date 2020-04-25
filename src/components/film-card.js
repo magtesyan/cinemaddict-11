@@ -21,9 +21,9 @@ const createFilmCardTemplate = (filmCard) => {
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${commentsLength} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${setControlItemActive(addToWatchList)}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${setControlItemActive(alreadyWatched)}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${setControlItemActive(addToFavorites)}">Mark as favorite</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${setControlItemActive(addToWatchList)}">Add to watchlist</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--mark-as-watched ${setControlItemActive(alreadyWatched)}">Mark as watched</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--favorite ${setControlItemActive(addToFavorites)}">Mark as favorite</button>
       </form>
     </article>`
   );
@@ -33,6 +33,7 @@ class FilmCard extends AbstractComponent {
   constructor(filmCard) {
     super();
     this._filmCard = filmCard;
+    this._submitHandler = null;
   }
 
   getTemplate() {
@@ -41,6 +42,23 @@ class FilmCard extends AbstractComponent {
 
   setClickHandler(handler) {
     this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, handler);
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, handler);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, handler);
+  }
+
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
+    this._submitHandler = handler;
   }
 }
 
