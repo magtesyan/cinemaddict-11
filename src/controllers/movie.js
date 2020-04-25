@@ -3,42 +3,56 @@ import {ESC_KEY} from "../const.js";
 import FilmDetailsPopupComponent from "../components/film-details-popup.js";
 import FilmCardComponent from "../components/film-card.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  POPUP: `popup`,
+};
+
 class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
     this._siteMain = document.querySelector(`.main`);
     this._filmDetailsPopupComponent = null;
     this._filmCardComponent = null;
   }
 
+  _onCloseFilmDetailsPopup() {
+    removeChild(this._siteMain, this._filmDetailsPopupComponent);
+    this._mode = Mode.DEFAULT;
+
+    this._filmDetailsPopupComponent.removeClickHandler(() => {
+      this._onCloseFilmDetailsPopup();
+    });
+
+    document.removeEventListener(`keydown`, (evt) => {
+      if (evt.key === ESC_KEY) {
+        this._onCloseFilmDetailsPopup();
+      }
+    });
+  }
+
   render(film) {
-    console.log(film);
     const oldFilmComponent = this._filmCardComponent;
     const oldFilmPopupComponent = this._filmDetailsPopupComponent;
     this._filmDetailsPopupComponent = new FilmDetailsPopupComponent(film);
     this._filmCardComponent = new FilmCardComponent(film);
 
     const onPosterClick = () => {
-      const onCloseFilmDetailsPopup = () => {
-        removeChild(this._siteMain, filmDetailsPopupComponent);
+      this._onViewChange();
 
-        filmDetailsPopupComponent.removeClickHandler(onCloseFilmDetailsPopup);
-        document.removeEventListener(`keydown`, function (evt) {
-          if (evt.key === ESC_KEY) {
-            onCloseFilmDetailsPopup();
-          }
-        });
-      };
+      appendChild(this._siteMain, this._filmDetailsPopupComponent);
+      this._mode = Mode.POPUP;
 
-      const filmDetailsPopupComponent = new FilmDetailsPopupComponent(film);
-      appendChild(this._siteMain, filmDetailsPopupComponent);
+      this._filmDetailsPopupComponent.setClickHandler(() => {
+        this._onCloseFilmDetailsPopup();
+      });
 
-      filmDetailsPopupComponent.setClickHandler(onCloseFilmDetailsPopup);
-
-      document.addEventListener(`keydown`, function (evt) {
+      document.addEventListener(`keydown`, (evt) => {
         if (evt.key === ESC_KEY) {
-          onCloseFilmDetailsPopup();
+          this._onCloseFilmDetailsPopup();
         }
       });
     };
@@ -69,6 +83,12 @@ class MovieController {
         addToFavorites: !film.addToFavorites,
       }));
     });
+  }
+
+  _setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._onCloseFilmDetailsPopup();
+    }
   }
 }
 

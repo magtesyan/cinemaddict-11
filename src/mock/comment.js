@@ -16,10 +16,10 @@ const authors = [
 ];
 
 const emojies = [
-  `angry.png`,
-  `puke.png`,
-  `sleeping.png`,
-  `smile.png`
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
 ];
 
 const generateComment = () => {
@@ -27,7 +27,7 @@ const generateComment = () => {
 
   return {
     text: getRandomArrayItem(texts),
-    emoji: getRandomArrayItem(emojies),
+    emoji: getRandomArrayItem(emojies) + `.png`,
     author: getRandomArrayItem(authors),
     date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
   };
@@ -39,4 +39,4 @@ const generateComments = (count) => {
     .map(generateComment);
 };
 
-export {generateComments};
+export {generateComments, emojies};
