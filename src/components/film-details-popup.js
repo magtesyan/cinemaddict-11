@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {emojies} from "../mock/comment.js";
+import moment from "moment";
 
 const createEmojiesListMarkup = (selectedEmoji) => {
   let markup = ``;
@@ -17,6 +18,7 @@ const createEmojiesListMarkup = (selectedEmoji) => {
 
 const createCommentsMarkup = (comments) => {
   const {emoji, text, author, date} = comments;
+  const commentPastDate = moment(date).fromNow();
 
   return (
     `<li class="film-details__comment">
@@ -27,7 +29,7 @@ const createCommentsMarkup = (comments) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
+          <span class="film-details__comment-day">${commentPastDate}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -52,6 +54,7 @@ const createFilmDetailsPopupTemplate = (filmCard) => {
   };
 
   const emojiLabelMarkup = emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">` : ``;
+  const releaseDate = moment(date).format(`DD MMMM YYYY`);
 
   return (
     `<section class="film-details">
@@ -94,7 +97,7 @@ const createFilmDetailsPopupTemplate = (filmCard) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${date}</td>
+                  <td class="film-details__cell">${releaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

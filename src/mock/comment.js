@@ -1,4 +1,5 @@
 import {getRandomArrayItem} from "../utils/common.js";
+import {getRandomDate} from "../utils/common.js";
 
 const texts = [
   `Interesting setting and a good cast`,
@@ -23,13 +24,13 @@ const emojies = [
 ];
 
 const generateComment = () => {
-  const date = new Date();
+  const date = getRandomDate();
 
   return {
     text: getRandomArrayItem(texts),
     emoji: getRandomArrayItem(emojies) + `.png`,
     author: getRandomArrayItem(authors),
-    date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+    date
   };
 };
 

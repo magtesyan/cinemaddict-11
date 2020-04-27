@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet} from "../utils/common.js";
+import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, makeSet} from "../utils/common.js";
 import {generateComments} from "./comment.js";
 
 const nameItems = {
@@ -90,12 +90,12 @@ const generateFilm = () => {
     comments: Math.random() > 0.2 ? generateComments(getRandomIntegerNumber(1, 5)) : [],
     rating: (Math.random(2) * 10).toFixed(1),
     year: date.getFullYear(),
-    duration: `${getRandomIntegerNumber(1, 2)}h ${getRandomIntegerNumber(1, 59)}m`,
+    duration: getRandomIntegerNumber(40, 200),
     genre,
     director: getRandomArrayItem(directors),
     writer: Array.from(writer).join(`, `),
     actor: Array.from(actor).join(`, `),
-    date: formatDate(date),
+    date,
     country: getRandomArrayItem(countries),
     ageLimit: getRandomArrayItem(ageLimits),
     addToWatchList: Math.random() > 0.5 ? true : false,
