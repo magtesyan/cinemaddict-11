@@ -98,9 +98,10 @@ const generateFilm = () => {
     date: formatDate(date),
     country: getRandomArrayItem(countries),
     ageLimit: getRandomArrayItem(ageLimits),
-    addToWatchList: Math.random() > 0.5 ? 1 : 0,
-    alreadyWatched: Math.random() > 0.5 ? 1 : 0,
-    addToFavorites: Math.random() > 0.5 ? 1 : 0
+    addToWatchList: Math.random() > 0.5 ? true : false,
+    alreadyWatched: Math.random() > 0.5 ? true : false,
+    addToFavorites: Math.random() > 0.5 ? true : false,
+    emoji: null
   };
 };
 
