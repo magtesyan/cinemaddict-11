@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+import moment from "moment";
 
 const setControlItemActive = (item) => {
   return item ? `film-card__controls-item--active` : ``;
@@ -7,6 +8,7 @@ const setControlItemActive = (item) => {
 const createFilmCardTemplate = (filmCard) => {
   const {name, rating, year, duration, genre, poster, description, comments, addToWatchList, alreadyWatched, addToFavorites} = filmCard;
   const commentsLength = comments ? comments.length : 0;
+  const filmDuration = `${moment.duration(duration, `m`).hours()}h ${moment.duration(duration, `m`).minutes()}m`;
 
   return (
     `<article class="film-card">
@@ -14,7 +16,7 @@ const createFilmCardTemplate = (filmCard) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${filmDuration}</span>
         <span class="film-card__genre">${Array.from(genre)[0]}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
