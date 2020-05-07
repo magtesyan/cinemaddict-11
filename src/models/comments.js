@@ -23,7 +23,6 @@ class Comments {
 
   onAddComment(comment) {
     this._comments = [].concat(this._comments, comment);
-    console.log(`added`);
   }
 }
 
