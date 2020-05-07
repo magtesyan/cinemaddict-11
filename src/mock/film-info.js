@@ -83,6 +83,7 @@ const generateFilm = () => {
   const date = getRandomDate();
 
   return {
+    id: String(new Date() + Math.random()),
     name,
     originalName: name,
     poster: nameItems[name],

@@ -1,18 +1,17 @@
-import {generateFilters} from "../mock/filter.js";
 import AbstractComponent from "./abstract-component.js";
+import {FilterType} from "../const.js";
 
 const createFiltersMarkup = (filter, isActive) => {
   const {name, count} = filter;
-  const countMarkup = count !== `` ? ` <span class="main-navigation__item-count">${count}</span></a>` : ``;
+  const countMarkup = (count !== `` && name !== FilterType.ALL) ? ` <span class="main-navigation__item-count">${count}</span></a>` : ``;
+
   return (
     `<a href="#${name}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">${name[0].toUpperCase()}${name.slice(1)}${countMarkup}`
   );
 };
 
-const createMenuTemplate = (films) => {
-
-  const filters = generateFilters(films);
-  const filtersMarkup = filters.map((it, i) => createFiltersMarkup(it, i === 0)).join(`\n`);
+const createMenuTemplate = (filters) => {
+  const filtersMarkup = filters.map((it) => createFiltersMarkup(it, it.checked)).join(`\n`);
 
   return (
     `<nav class="main-navigation">
@@ -25,13 +24,22 @@ const createMenuTemplate = (films) => {
 };
 
 class Menu extends AbstractComponent {
-  constructor(films) {
+  constructor(filters) {
     super();
-    this._films = films;
+    this._filters = filters;
   }
 
   getTemplate() {
-    return createMenuTemplate(this._films);
+    return createMenuTemplate(this._filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+
+      const filterElement = evt.target.tagName === `SPAN` ? evt.target.parentNode.textContent : evt.target.textContent;
+      const filterName = filterElement.replace(/\s+\d+/g, ``).toLowerCase().trim();
+      handler(filterName);
+    });
   }
 }
 

@@ -9,9 +9,9 @@ const SortType = {
 const createSortTemplate = () => {
   return (
     `<ul class="sort">
-      <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">Sort by date</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
+      <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by ${SortType.DEFAULT}</a></li>
+      <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">Sort by ${SortType.DATE}</a></li>
+      <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">Sort by ${SortType.RATING}</a></li>
     </ul>`
   );
 };
@@ -40,9 +40,16 @@ class Sort extends AbstractComponent {
       }
 
       this._currenSortType = sortType;
+      this.changeActiveFilter(this._currenSortType);
 
       handler(this._currenSortType);
     });
+  }
+
+  changeActiveFilter(sortType) {
+    this._currenSortType = sortType;
+    this._element.querySelector(`.sort__button--active`).classList.remove(`sort__button--active`);
+    this._element.querySelector(`[data-sort-type=${this._currenSortType}]`).classList.add(`sort__button--active`);
   }
 }
 
