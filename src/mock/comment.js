@@ -27,6 +27,7 @@ const generateComment = () => {
   const date = getRandomDate();
 
   return {
+    id: String(new Date() + Math.random()),
     text: getRandomArrayItem(texts),
     emoji: getRandomArrayItem(emojies) + `.png`,
     author: getRandomArrayItem(authors),
