@@ -17,6 +17,7 @@ class PageController {
     this._moviesModel = moviesModel;
     this._sortComponent = new SortComponent();
     this._moreButtonComponent = new MoreButtonComponent();
+    this._filmsComponent = null;
     this._siteMain = document.querySelector(`.main`);
     this._moreButton = this._moreButtonComponent;
     this._onDataChange = this._onDataChange.bind(this);
@@ -72,8 +73,9 @@ class PageController {
 
   render(minFilmsNum, maxFilmsNum) {
     const films = this._moviesModel.getMovies();
+    this._filmsComponent = new FilmsComponent(films);
     render(this._siteMain, this._sortComponent, RenderPosition.BEFOREEND);
-    render(this._siteMain, new FilmsComponent(films), RenderPosition.BEFOREEND);
+    render(this._siteMain, this._filmsComponent, RenderPosition.BEFOREEND);
 
     const siteFilmsSection = this._siteMain.querySelector(`.films`);
     const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
@@ -162,6 +164,13 @@ class PageController {
 
   _onViewChange() {
     this._showedMovieControllers.forEach((it) => it._setDefaultView());
+  }
+
+  hide() {
+  }
+
+  show() {
+    this._filmsComponent.show();
   }
 }
 

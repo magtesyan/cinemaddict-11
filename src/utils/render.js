@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
@@ -46,4 +48,8 @@ const replace = (newComponent, oldComponent) => {
   }
 };
 
-export {RenderPosition, render, createElement, remove, appendChild, removeChild, replace};
+const filmDuration = (duration) => {
+  return `${moment.duration(duration, `m`).hours()}h ${moment.duration(duration, `m`).minutes()}m`;
+};
+
+export {RenderPosition, render, createElement, remove, appendChild, removeChild, replace, filmDuration};

@@ -14,10 +14,10 @@ const siteHeader = document.querySelector(`.header`);
 const siteMain = document.querySelector(`.main`);
 
 render(siteHeader, new UserRankComponent(), RenderPosition.BEFOREEND);
-const filterController = new FilterController(siteMain, moviesModel);
+const pageController = new PageController(`.films-list`, moviesModel);
+const filterController = new FilterController(siteMain, moviesModel, pageController);
 filterController.render();
 
-const pageController = new PageController(`.films-list`, moviesModel);
 pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
 
 const siteFooter = document.querySelector(`.footer`);
