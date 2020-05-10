@@ -1,4 +1,4 @@
-import {MONTHS, DAYS_IN_MONTH, MONTHS_IN_YEAR, FILMS_PROD_START_YEAR, FILMS_PROD_END_YEAR} from "../const.js";
+import {MONTHS, DAYS_IN_MONTH, MONTHS_IN_YEAR} from "../const.js";
 
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min + 1));
@@ -10,11 +10,11 @@ const getRandomArrayItem = (array) => {
   return array[randomIndex];
 };
 
-const getRandomDate = () => {
+const getRandomDate = (startYear, endYear) => {
   const targetDate = new Date();
   targetDate.setDate(getRandomIntegerNumber(1, DAYS_IN_MONTH));
   targetDate.setMonth(getRandomIntegerNumber(1, MONTHS_IN_YEAR));
-  targetDate.setYear(getRandomIntegerNumber(FILMS_PROD_START_YEAR, FILMS_PROD_END_YEAR));
+  targetDate.setYear(getRandomIntegerNumber(startYear, endYear));
 
   return targetDate;
 };
@@ -33,4 +33,11 @@ const makeSet = (array) => {
   return newSet;
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet};
+const getMaxValueKeyFromObject = (obj) => {
+  const maxValue = Math.max(...Object.values(obj));
+  const topKeys = Object.keys(obj).filter((it) => obj[it] === maxValue);
+  const topKey = topKeys[0];
+  return topKey;
+};
+
+export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject};

@@ -24,7 +24,7 @@ const emojies = [
 ];
 
 const generateComment = () => {
-  const date = getRandomDate();
+  const date = getRandomDate(2018, 2020);
 
   return {
     id: String(new Date() + Math.random()),

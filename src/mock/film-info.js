@@ -1,5 +1,6 @@
 import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, makeSet} from "../utils/common.js";
 import {generateComments} from "./comment.js";
+import {FILMS_PROD_START_YEAR, FILMS_PROD_END_YEAR} from "../const.js";
 
 const nameItems = {
   "made-for-each-other": `made-for-each-other.png`,
@@ -80,7 +81,7 @@ const generateFilm = () => {
   let actor = makeSet(actors);
   let genre = makeSet(genres);
 
-  const date = getRandomDate();
+  const date = getRandomDate(FILMS_PROD_START_YEAR, FILMS_PROD_END_YEAR);
 
   return {
     id: String(new Date() + Math.random()),
@@ -102,7 +103,8 @@ const generateFilm = () => {
     addToWatchList: Math.random() > 0.5 ? true : false,
     alreadyWatched: Math.random() > 0.5 ? true : false,
     addToFavorites: Math.random() > 0.5 ? true : false,
-    emoji: null
+    emoji: null,
+    watchingDate: getRandomDate(2020, 2020),
   };
 };
 
@@ -112,4 +114,4 @@ const generateFilms = (count) => {
     .map(generateFilm);
 };
 
-export {generateFilms};
+export {generateFilms, genres};
