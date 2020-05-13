@@ -28,7 +28,7 @@ class Movies {
   }
 
   setMovies(films) {
-    this._films = Array.from(films);
+    this._films = films;
   }
 
   setFilter(filterType) {
