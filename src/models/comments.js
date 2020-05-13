@@ -8,7 +8,7 @@ class Comments {
   }
 
   setComments(film) {
-    this._comments = Array.from(film.comments);
+    this._comments = film.comments;
   }
 
   onDeleteComment(id) {

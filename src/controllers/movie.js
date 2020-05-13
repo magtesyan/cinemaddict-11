@@ -2,6 +2,7 @@ import {render, appendChild, removeChild, RenderPosition, replace, remove} from 
 import {Keys} from "../const.js";
 import FilmDetailsPopupComponent from "../components/film-details-popup.js";
 import FilmCardComponent from "../components/film-card.js";
+import FilmModel from "../models/film.js";
 import CommentsBoardComponent from "../components/comments-board.js";
 import CommentsModel from "../models/comments.js";
 
@@ -80,26 +81,25 @@ class MovieController {
       });
 
       this._filmDetailsPopupComponent.setWatchlistButtonClickHandler(() => {
-        film = this._onModelDataChange(film, Object.assign({}, film, {
-          addToWatchList: !film.addToWatchList,
-        }));
+        const newFilm = FilmModel.clone(film);
+        newFilm.addToWatchList = !film.addToWatchList;
+        film = this._onModelDataChange(film, newFilm);
         filmsToUpdate[filmsToUpdate.length - 1].film = film;
       });
 
       this._filmDetailsPopupComponent.setWatchedButtonClickHandler(() => {
-        film = this._onModelDataChange(film, Object.assign({}, film, {
-          alreadyWatched: !film.alreadyWatched,
-        }));
+        const newFilm = FilmModel.clone(film);
+        newFilm.alreadyWatched = !film.alreadyWatched;
+        film = this._onModelDataChange(film, newFilm);
         filmsToUpdate[filmsToUpdate.length - 1].film = film;
       });
 
       this._filmDetailsPopupComponent.setFavoriteButtonClickHandler(() => {
-        film = this._onModelDataChange(film, Object.assign({}, film, {
-          addToFavorites: !film.addToFavorites,
-        }));
+        const newFilm = FilmModel.clone(film);
+        newFilm.addToFavorites = !film.addToFavorites;
+        film = this._onModelDataChange(film, newFilm);
         filmsToUpdate[filmsToUpdate.length - 1].film = film;
       });
-
     };
 
     if (oldFilmComponent && oldFilmPopupComponent) {
@@ -112,29 +112,32 @@ class MovieController {
     this._filmCardComponent.setClickHandler(onPosterClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        addToWatchList: !film.addToWatchList,
-      }));
+      const newFilm = FilmModel.clone(film);
+      newFilm.addToWatchList = !film.addToWatchList;
+      newFilm.comments = film.comments;
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmCardComponent.setWatchedButtonClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        alreadyWatched: !film.alreadyWatched,
-      }));
+      const newFilm = FilmModel.clone(film);
+      newFilm.alreadyWatched = !film.alreadyWatched;
+      newFilm.comments = film.comments;
+      this._onDataChange(this, film, newFilm);
     });
 
     this._filmCardComponent.setFavoriteButtonClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        addToFavorites: !film.addToFavorites,
-      }));
+      const newFilm = FilmModel.clone(film);
+      newFilm.addToFavorites = !film.addToFavorites;
+      newFilm.comments = film.comments;
+      this._onDataChange(this, film, newFilm);
     });
   }
 
   _updateFilm() {
-    filmsToUpdate.forEach((it) => {
-      this._onDataChange(this, it.film, Object.assign({}, it.film, {
-        comments: it.commentsModel.getComments(it.film),
-      }));
+    filmsToUpdate.forEach((movie) => {
+      const newFilm = FilmModel.clone(movie.film);
+      newFilm.comments = movie.commentsModel.getComments(movie.film);
+      this._onDataChange(this, movie.film, newFilm);
     });
     filmsToUpdate = [];
   }

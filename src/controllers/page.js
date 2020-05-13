@@ -9,12 +9,13 @@ import {SHOWING_FILMS_COUNT_ON_START, SHOWING_FILM_COUNT_BY_BUTTON, EXTRA_FILM_C
 const EXTRA_BLOCK_TITLE = [`Top rated`, `Most commented`];
 
 class PageController {
-  constructor(containerClass, moviesModel) {
+  constructor(containerClass, moviesModel, api) {
     this._showedMovieControllers = [];
     this._extraBlockComponents = [];
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
     this._containerClass = containerClass;
     this._moviesModel = moviesModel;
+    this._api = api;
     this._sortComponent = new SortComponent();
     this._moreButtonComponent = new MoreButtonComponent();
     this._filmsComponent = null;
@@ -79,6 +80,7 @@ class PageController {
 
     const siteFilmsSection = this._siteMain.querySelector(`.films`);
     const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
+
     this._renderFilmCards(siteFilmsListSection, films, minFilmsNum, maxFilmsNum, this._onDataChange, this._onViewChange, this._onModelDataChange);
 
     this._renderShowMoreButton(siteFilmsSection, films);
@@ -125,6 +127,7 @@ class PageController {
     this._containerClass = `.films`;
     const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
     const sortedFilms = this._getSortedFilms(this._moviesModel.getMovies(), this._sortType, 0, this._moviesModel.getMovies().length);
+
     this._removeFilms();
     this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._onModelDataChange);
     remove(this._moreButton);
@@ -143,15 +146,16 @@ class PageController {
 
   _onDataChange(movieController, oldData, newData) {
     this._onModelDataChange(oldData, newData);
-    this._showedMovieControllers.forEach((it) => {
-      if (it._filmCardComponent._filmCard === oldData) {
-        it.render(newData);
+    this._showedMovieControllers.forEach((controller) => {
+      if (controller._filmCardComponent._filmCard === oldData) {
+        controller.render(newData);
       }
     });
     this._updateFilms();
   }
 
   _onModelDataChange(oldData, newData) {
+    this._api.updateFilm(oldData.id, newData);
     this._moviesModel.updateFilm(oldData.id, newData);
     return newData;
   }
