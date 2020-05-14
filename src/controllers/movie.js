@@ -14,11 +14,11 @@ const Mode = {
 let filmsToUpdate = [];
 
 class MovieController {
-  constructor(container, onDataChange, onViewChange, onModelDataChange) {
+  constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
-    this._onModelDataChange = onModelDataChange;
+    this._api = api;
     this._commentsModel = null;
     this._mode = Mode.DEFAULT;
     this._siteMain = document.querySelector(`.main`);
@@ -83,22 +83,31 @@ class MovieController {
       this._filmDetailsPopupComponent.setWatchlistButtonClickHandler(() => {
         const newFilm = FilmModel.clone(film);
         newFilm.addToWatchList = !film.addToWatchList;
-        film = this._onModelDataChange(film, newFilm);
-        filmsToUpdate[filmsToUpdate.length - 1].film = film;
+        this._api.updateFilm(film.id, newFilm)
+        .then((updatedFilm) => {
+          film = updatedFilm;
+          filmsToUpdate[filmsToUpdate.length - 1].film = updatedFilm;
+        });
       });
 
       this._filmDetailsPopupComponent.setWatchedButtonClickHandler(() => {
         const newFilm = FilmModel.clone(film);
         newFilm.alreadyWatched = !film.alreadyWatched;
-        film = this._onModelDataChange(film, newFilm);
-        filmsToUpdate[filmsToUpdate.length - 1].film = film;
+        this._api.updateFilm(film.id, newFilm)
+        .then((updatedFilm) => {
+          film = updatedFilm;
+          filmsToUpdate[filmsToUpdate.length - 1].film = updatedFilm;
+        });
       });
 
       this._filmDetailsPopupComponent.setFavoriteButtonClickHandler(() => {
         const newFilm = FilmModel.clone(film);
         newFilm.addToFavorites = !film.addToFavorites;
-        film = this._onModelDataChange(film, newFilm);
-        filmsToUpdate[filmsToUpdate.length - 1].film = film;
+        this._api.updateFilm(film.id, newFilm)
+        .then((updatedFilm) => {
+          film = updatedFilm;
+          filmsToUpdate[filmsToUpdate.length - 1].film = updatedFilm;
+        });
       });
     };
 
@@ -155,7 +164,7 @@ class MovieController {
 
   renderCommentsBoard(film) {
     const commentsSection = this._siteMain.querySelector(`.form-details__bottom-container`);
-    this._commentBoardComponent = new CommentsBoardComponent(this._commentsModel, film.emoji);
+    this._commentBoardComponent = new CommentsBoardComponent(this._commentsModel, film.emoji, this._api, film);
     render(commentsSection, this._commentBoardComponent, RenderPosition.BEFOREEND);
     this._commentBoardComponent.renderAllComments();
     this._commentBoardComponent.addNewCommentHandler();

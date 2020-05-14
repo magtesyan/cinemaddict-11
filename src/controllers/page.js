@@ -26,7 +26,6 @@ class PageController {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onShowMoreButtonClick = this._onShowMoreButtonClick.bind(this);
     this._moviesModel.setFilterChangeHandler(this._onFilterChange);
-    this._onModelDataChange = this._onModelDataChange.bind(this);
     this._sortType = SortType.DEFAULT;
   }
 
@@ -65,7 +64,7 @@ class PageController {
     const filmCards = this._moviesModel.getMovies();
     this._showingFilmsCount = prevFilmsCount + SHOWING_FILM_COUNT_BY_BUTTON;
 
-    this._renderFilmCards(siteFilmsSection, filmCards, prevFilmsCount, this._showingFilmsCount, this._onDataChange, this._onViewChange, this._onModelDataChange);
+    this._renderFilmCards(siteFilmsSection, filmCards, prevFilmsCount, this._showingFilmsCount, this._onDataChange, this._onViewChange, this._api);
 
     if (this._showingFilmsCount >= filmCards.length) {
       remove(this._moreButton);
@@ -81,7 +80,7 @@ class PageController {
     const siteFilmsSection = this._siteMain.querySelector(`.films`);
     const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
 
-    this._renderFilmCards(siteFilmsListSection, films, minFilmsNum, maxFilmsNum, this._onDataChange, this._onViewChange, this._onModelDataChange);
+    this._renderFilmCards(siteFilmsListSection, films, minFilmsNum, maxFilmsNum, this._onDataChange, this._onViewChange, this._api);
 
     this._renderShowMoreButton(siteFilmsSection, films);
     this._renderExtraBlocks(films, siteFilmsSection);
@@ -92,7 +91,7 @@ class PageController {
       this._sortType = sortType;
       siteFilmsListContainer.innerHTML = ``;
       remove(this._moreButton);
-      this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._onModelDataChange);
+      this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._api);
       this._renderShowMoreButton(siteFilmsSection, sortedFilms);
     });
   }
@@ -110,7 +109,7 @@ class PageController {
           this._extraBlockComponents.push(extraBlock);
           render(siteFilmsSection, extraBlock, RenderPosition.BEFOREEND);
           const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
-          this._renderFilmCards(siteFilmsListSection, extraFilms, 0, EXTRA_FILM_CARD_COUNT, this._onDataChange, this._onViewChange, this._onModelDataChange);
+          this._renderFilmCards(siteFilmsListSection, extraFilms, 0, EXTRA_FILM_CARD_COUNT, this._onDataChange, this._onViewChange, this._api);
         }
       }
     });
@@ -129,35 +128,32 @@ class PageController {
     const sortedFilms = this._getSortedFilms(this._moviesModel.getMovies(), this._sortType, 0, this._moviesModel.getMovies().length);
 
     this._removeFilms();
-    this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._onModelDataChange);
+    this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._api);
     remove(this._moreButton);
     this._renderShowMoreButton(siteFilmsListSection, sortedFilms);
     this._renderExtraBlocks(sortedFilms, siteFilmsListSection);
   }
 
-  _renderFilmCards(section, films, startNum, endNum, onDataChange, onViewChange, onModelDataChange) {
+  _renderFilmCards(section, films, startNum, endNum, onDataChange, onViewChange, api) {
     films.slice(startNum, endNum).forEach((film) => {
       const siteFilmsListContainer = section.querySelector(`.films-list__container`);
-      const movieController = new MovieController(siteFilmsListContainer, onDataChange, onViewChange, onModelDataChange);
+      const movieController = new MovieController(siteFilmsListContainer, onDataChange, onViewChange, api);
       movieController.render(film);
       this._showedMovieControllers = this._showedMovieControllers.concat(movieController);
     });
   }
 
   _onDataChange(movieController, oldData, newData) {
-    this._onModelDataChange(oldData, newData);
-    this._showedMovieControllers.forEach((controller) => {
-      if (controller._filmCardComponent._filmCard === oldData) {
-        controller.render(newData);
-      }
+    this._api.updateFilm(oldData.id, newData).
+    then(() => {
+      this._moviesModel.updateFilm(oldData.id, newData);
+      this._showedMovieControllers.forEach((controller) => {
+        if (controller._filmCardComponent._filmCard === oldData) {
+          controller.render(newData);
+        }
+      });
+      this._updateFilms();
     });
-    this._updateFilms();
-  }
-
-  _onModelDataChange(oldData, newData) {
-    this._api.updateFilm(oldData.id, newData);
-    this._moviesModel.updateFilm(oldData.id, newData);
-    return newData;
   }
 
   _onFilterChange() {
