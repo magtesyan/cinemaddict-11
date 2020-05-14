@@ -1,9 +1,10 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import CommentController from "../controllers/comment.js";
 import CommentModel from "../models/comment.js";
-import {emojies} from "../mock/comment.js";
 import {Keys} from "../const.js";
+import {emojies} from "../mock/comment.js";
 import {encode} from "he";
+import {shake} from "../utils/common.js";
 
 const createEmojiesListMarkup = (selectedEmoji) => {
   let markup = ``;
@@ -100,6 +101,8 @@ class CommentsBoard extends AbstractSmartComponent {
 
     element.addEventListener(`keydown`, (evt) => {
       if (evt.key === Keys.ENTER_KEY && (evt.ctrlKey)) {
+        emoji.style.pointerEvents = `none`;
+        commentArea.classList.add(`disabled`);
         if (this._emoji && this._userComment) {
           const newComment = {
             comment: this._userComment,
@@ -107,7 +110,6 @@ class CommentsBoard extends AbstractSmartComponent {
             date: new Date(),
           };
           const convertedComment = new CommentModel(newComment);
-
           this._api.createComment(this._filmId, convertedComment.toRAW())
           .then(() => this._api.getComments(this._filmId))
           .then((comments) => {
@@ -115,7 +117,17 @@ class CommentsBoard extends AbstractSmartComponent {
             convertedComment.author = comments[comments.length - 1].author;
             convertedComment.id = comments[comments.length - 1].id;
             this._commentsModel.onAddComment(convertedComment);
+            this._emoji = ``;
+            this._userComment = ``;
             this.rerender();
+          })
+          .catch(() => {
+            emoji.style.pointerEvents = `auto`;
+            commentArea.classList.remove(`disabled`);
+            commentArea.style.borderWidth = `2px`;
+            commentArea.style.borderColor = `red`;
+            shake(emoji);
+            shake(commentArea);
           });
         }
       }

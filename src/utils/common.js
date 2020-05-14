@@ -40,4 +40,14 @@ const getMaxValueKeyFromObject = (obj) => {
   return topKey;
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject};
+const shake = (element) => {
+  const SHAKE_ANIMATION_TIMEOUT = 600;
+
+  element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+  setTimeout(() => {
+    element.style.animation = ``;
+  }, SHAKE_ANIMATION_TIMEOUT);
+};
+
+export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject, shake};
