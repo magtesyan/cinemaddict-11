@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import CommentController from "../controllers/comment.js";
+import CommentModel from "../models/comment.js";
 import {emojies} from "../mock/comment.js";
 import {Keys} from "../const.js";
 import {encode} from "he";
@@ -46,12 +47,15 @@ const createCommentsTemplate = (comments, emoji, userComment) => {
 };
 
 class CommentsBoard extends AbstractSmartComponent {
-  constructor(commentsModel, emoji) {
+  constructor(commentsModel, emoji, api, film) {
     super();
     this._comments = commentsModel.getComments();
     this._emoji = emoji;
     this._userComment = ``;
     this._commentsModel = commentsModel;
+    this._api = api;
+    this._film = film;
+    this._filmId = film.id;
   }
 
   getTemplate() {
@@ -67,7 +71,7 @@ class CommentsBoard extends AbstractSmartComponent {
     this._comments = this._commentsModel.getComments();
 
     this._comments.forEach((comment) => {
-      const commentController = new CommentController(commentItem, this._commentsModel, this);
+      const commentController = new CommentController(commentItem, this._commentsModel, this, this._api);
       commentController.render(comment);
     });
   }
@@ -98,15 +102,21 @@ class CommentsBoard extends AbstractSmartComponent {
       if (evt.key === Keys.ENTER_KEY && (evt.ctrlKey)) {
         if (this._emoji && this._userComment) {
           const newComment = {
-            id: String(new Date() + Math.random()),
-            text: this._userComment,
-            emoji: this._emoji + `.png`,
-            author: `random`,
+            comment: this._userComment,
+            emotion: this._emoji + `.png`,
             date: new Date(),
           };
+          const convertedComment = new CommentModel(newComment);
 
-          this._commentsModel.onAddComment(newComment);
-          this.rerender();
+          this._api.createComment(this._filmId, convertedComment.toRAW())
+          .then(() => this._api.getComments(this._filmId))
+          .then((comments) => {
+            convertedComment.emoji = convertedComment.emoji + `.png`;
+            convertedComment.author = comments[comments.length - 1].author;
+            convertedComment.id = comments[comments.length - 1].id;
+            this._commentsModel.onAddComment(convertedComment);
+            this.rerender();
+          });
         }
       }
     });
