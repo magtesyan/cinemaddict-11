@@ -2,14 +2,20 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import CommentController from "../controllers/comment.js";
 import CommentModel from "../models/comment.js";
 import {Keys} from "../const.js";
-import {emojies} from "../mock/comment.js";
 import {encode} from "he";
 import {shake} from "../utils/common.js";
+
+const Emojies = [
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
+];
 
 const createEmojiesListMarkup = (selectedEmoji) => {
   let markup = ``;
 
-  emojies.forEach((emoji) => {
+  Emojies.forEach((emoji) => {
     const checked = selectedEmoji === emoji ? `checked` : ``;
     markup += `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${checked}>
     <label class="film-details__emoji-label" for="emoji-${emoji}">
