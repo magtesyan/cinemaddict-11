@@ -50,4 +50,8 @@ const shake = (element) => {
   }, SHAKE_ANIMATION_TIMEOUT);
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject, shake};
+const isOnline = () => {
+  return window.navigator.onLine;
+};
+
+export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject, shake, isOnline};

@@ -1,5 +1,5 @@
-import Film from "./models/film.js";
-import Comment from "./models/comment.js";
+import Film from "../models/film.js";
+import Comment from "../models/comment.js";
 
 const Method = {
   GET: `GET`,
@@ -59,6 +59,16 @@ const API = class {
 
   deleteComment(commentId) {
     return this._load({url: `comments/${commentId}`, method: Method.DELETE});
+  }
+
+  sync(data) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
