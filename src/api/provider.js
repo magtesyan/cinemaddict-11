@@ -1,12 +1,9 @@
 import Film from "../models/film.js";
-
-const isOnline = () => {
-  return window.navigator.onLine;
-};
+import {isOnline} from "../utils/common.js";
 
 const getSyncedFilms = (items) => {
   return items.filter(({success}) => success)
-    .map(({payload}) => payload.task);
+    .map(({payload}) => payload.film);
 };
 
 const createStoreStructure = (items) => {
@@ -37,7 +34,7 @@ class Provider {
 
     const storeFilms = Object.values(this._store.getItems());
 
-    return Promise.resolve(Film.parseTasks(storeFilms));
+    return Promise.resolve(Film.parseFilms(storeFilms));
   }
 
   updateFilm(filmId, data) {
@@ -87,11 +84,7 @@ class Provider {
 
       return this._api.sync(storeFilms)
         .then((response) => {
-          // Забираем из ответа синхронизированные задачи
           const updatedFilms = getSyncedFilms(response.updated);
-
-          // Добавляем синхронизированные задачи в хранилище.
-          // Хранилище должно быть актуальным в любой момент.
           const items = createStoreStructure([...updatedFilms]);
 
           this._store.setItems(items);

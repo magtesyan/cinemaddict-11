@@ -5,6 +5,7 @@ import FilmCardComponent from "../components/film-card.js";
 import FilmModel from "../models/film.js";
 import CommentsBoardComponent from "../components/comments-board.js";
 import CommentsModel from "../models/comments.js";
+import {isOnline} from "../utils/common.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -66,7 +67,9 @@ class MovieController {
       appendChild(this._siteMain, this._filmDetailsPopupComponent);
       this._mode = Mode.POPUP;
 
-      this.renderCommentsBoard(film);
+      if (isOnline()) {
+        this.renderCommentsBoard(film);
+      }
 
       this._filmDetailsPopupComponent.setClickHandler(() => {
         this._onCloseFilmDetailsPopup(film);

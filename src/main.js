@@ -38,9 +38,12 @@ apiWithProvider.getMovies()
     let fetches = [];
     filmCards.map((film) => {
       fetches.push(
-          api.getComments(film[`id`])
+          apiWithProvider.getComments(film[`id`])
             .then((comments) => {
               film.comments = comments;
+            })
+            .catch(() => {
+              return;
             }));
     });
     Promise.all(fetches).then(() => {
@@ -50,3 +53,21 @@ apiWithProvider.getMovies()
       render(siteFooterStatiscticsSection, new FooterStatsComponent(filmCards), RenderPosition.BEFOREEND);
     });
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      // Действие, в случае успешной регистрации ServiceWorker
+    }).catch(() => {
+      // Действие, в случае ошибки при регистрации ServiceWorker
+    });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+
+  apiWithProvider.sync();
+});
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
