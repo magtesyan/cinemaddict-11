@@ -5,6 +5,18 @@ import {filmDuration} from "../utils/render.js";
 import {getMaxValueKeyFromObject} from "../utils/common.js";
 import {userLevel} from "../utils/filter.js";
 
+const createUserRankBlock = (films) => {
+  const userRank = userLevel(films);
+
+  return userRank !== `` ? (
+    `<p class="statistic__rank">
+      Your rank
+      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+      <span class="statistic__rank-label">${userRank}</span>
+    </p>`
+  ) : ``;
+};
+
 const createPeriodsMarkup = (period, isActive) => {
   const periodInTags = period.toLowerCase().replace(` `, `-`);
   return (
@@ -21,15 +33,12 @@ const createStatisticsTemplate = (films, topGenre, Periods) => {
     return a + b.duration;
   }, 0));
 
-  const userRank = userLevel(films);
+  const userRankBlock = createUserRankBlock(films);
 
   return (
     `<section class="statistic">
     <p class="statistic__rank">
-      Your rank
-      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${userRank}</span>
-    </p>
+      ${userRankBlock}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
