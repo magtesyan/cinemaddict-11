@@ -27,6 +27,7 @@ class MovieController {
     this._filmCardComponent = null;
     this.commentsBoardComponent = null;
     this.commentComponent = null;
+    this._onEscBtnPressed = this._onEscBtnPressed.bind(this);
   }
 
   _onCloseFilmDetailsPopup() {
@@ -37,11 +38,14 @@ class MovieController {
       this._onCloseFilmDetailsPopup();
     });
 
-    document.removeEventListener(`keydown`, (evt) => {
-      if (evt.key === Keys.ESC_KEY) {
-        this._onCloseFilmDetailsPopup();
-      }
-    });
+    document.removeEventListener(`keydown`, this._onEscBtnPressed);
+  }
+
+  _onEscBtnPressed(evt) {
+    if (evt.key === Keys.ESC_KEY) {
+      this._onCloseFilmDetailsPopup();
+      this._updateFilm();
+    }
   }
 
   render(film) {
@@ -76,12 +80,7 @@ class MovieController {
         this._updateFilm();
       });
 
-      document.addEventListener(`keydown`, (evt) => {
-        if (evt.key === Keys.ESC_KEY) {
-          this._onCloseFilmDetailsPopup(film);
-          this._updateFilm();
-        }
-      });
+      document.addEventListener(`keydown`, this._onEscBtnPressed);
 
       this._filmDetailsPopupComponent.setWatchlistButtonClickHandler(() => {
         const newFilm = FilmModel.clone(film);
