@@ -52,7 +52,7 @@ class MovieController {
     this._commentsModel = new CommentsModel();
     this._commentsModel.setComments(film);
 
-    const onPosterClick = () => {
+    const onFilmClick = () => {
       if (this._filmDetailsPopupComponent) {
         remove(this._filmDetailsPopupComponent);
       }
@@ -121,7 +121,9 @@ class MovieController {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
 
-    this._filmCardComponent.setClickHandler(onPosterClick);
+    this._filmCardComponent.setPosterClickHandler(onFilmClick);
+    this._filmCardComponent.setTitleClickHandler(onFilmClick);
+    this._filmCardComponent.setCommentsClickHandler(onFilmClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
       const newFilm = FilmModel.clone(film);

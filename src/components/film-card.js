@@ -45,8 +45,16 @@ class FilmCard extends AbstractComponent {
     return createFilmCardTemplate(this._filmCard);
   }
 
-  setClickHandler(handler) {
+  setPosterClickHandler(handler) {
     this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+  }
+
+  setCommentsClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
+  }
+
+  setTitleClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
   }
 
   setWatchlistButtonClickHandler(handler) {
