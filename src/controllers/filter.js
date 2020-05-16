@@ -60,6 +60,14 @@ class FilterController {
     this._statisticsComponent.hide();
   }
 
+  _resetPeriods() {
+    for (let period in this.Periods) {
+      if (Object.prototype.hasOwnProperty.call(this.Periods, period)) {
+        this.Periods[period] = false;
+      }
+    }
+  }
+
   _onFilterChange(filterType) {
     if (filterType === `stats`) {
       this.pageController._filmsComponent.hide();
@@ -78,14 +86,6 @@ class FilterController {
   _onDataChange() {
     remove(this._statisticsComponent);
     this.render();
-  }
-
-  _resetPeriods() {
-    for (let period in this.Periods) {
-      if (Object.prototype.hasOwnProperty.call(this.Periods, period)) {
-        this.Periods[period] = false;
-      }
-    }
   }
 
   _onStatsPeriodChangeHandler(evt) {
