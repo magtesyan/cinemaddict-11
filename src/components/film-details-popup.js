@@ -15,6 +15,8 @@ const createFilmDetailsPopupTemplate = (filmCard) => {
     return item ? `checked` : ``;
   };
 
+  const genres = genre.length > 1 ? `Genres` : `Genre`;
+
   const releaseDate = moment(date).format(`DD MMMM YYYY`);
 
   return (
@@ -69,7 +71,7 @@ const createFilmDetailsPopupTemplate = (filmCard) => {
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${genres}</td>
                   <td class="film-details__cell">
                     ${genreBlock}
                 </tr>
