@@ -1,8 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
-import {getRandomIntegerNumber} from "../utils/common.js";
 
 const createFooterStatsTemplate = (films) => {
-  const filmsCount = films.length ? new Intl.NumberFormat(`ru`).format(getRandomIntegerNumber(10000, 500000)) : 0;
+  const filmsCount = films.length ? films.length : 0;
 
   return (
     `${filmsCount} movies inside`
