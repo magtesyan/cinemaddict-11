@@ -5,7 +5,6 @@ import MoviesModel from "./models/movies.js";
 import PageController from "./controllers/page.js";
 import Provider from "./api/provider.js";
 import Store from "./api/store.js";
-import UserRankComponent from "./components/user-rank.js";
 import {SHOWING_FILMS_COUNT_ON_START} from "./const.js";
 import {render, RenderPosition} from "./utils/render.js";
 
@@ -20,15 +19,12 @@ const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const moviesModel = new MoviesModel();
 
-const siteHeader = document.querySelector(`.header`);
 const siteMain = document.querySelector(`.main`);
 const pageController = new PageController(`.films-list`, moviesModel, apiWithProvider);
 const filterController = new FilterController(siteMain, moviesModel, pageController);
 
 const siteFooter = document.querySelector(`.footer`);
 const siteFooterStatiscticsSection = siteFooter.querySelector(`.footer__statistics`);
-
-render(siteHeader, new UserRankComponent(), RenderPosition.BEFOREEND);
 
 apiWithProvider.getMovies()
   .then((filmCards) => {

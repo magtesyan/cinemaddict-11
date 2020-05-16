@@ -3,6 +3,7 @@ import ExtraBlockComponent from "../components/extra-block.js";
 import SortComponent, {SortType} from "../components/sort.js";
 import MoreButtonComponent from "../components/more-button.js";
 import MovieController from "./movie.js";
+import UserRankComponent from "../components/user-rank.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {SHOWING_FILMS_COUNT_ON_START, SHOWING_FILM_COUNT_BY_BUTTON, EXTRA_FILM_CARD_COUNT} from "../const.js";
 
@@ -19,6 +20,7 @@ class PageController {
     this._sortComponent = new SortComponent();
     this._moreButtonComponent = new MoreButtonComponent();
     this._filmsComponent = null;
+    this._userRankComponent = null;
     this._siteMain = document.querySelector(`.main`);
     this._moreButton = this._moreButtonComponent;
     this._onDataChange = this._onDataChange.bind(this);
@@ -73,7 +75,9 @@ class PageController {
 
   render(minFilmsNum, maxFilmsNum) {
     const films = this._moviesModel.getMovies();
+
     this._filmsComponent = new FilmsComponent(films);
+    this._renderUserRank(films);
     render(this._siteMain, this._sortComponent, RenderPosition.BEFOREEND);
     render(this._siteMain, this._filmsComponent, RenderPosition.BEFOREEND);
 
@@ -122,6 +126,15 @@ class PageController {
     this._extraBlockComponents = [];
   }
 
+  _renderUserRank(films) {
+    const siteHeader = document.querySelector(`.header`);
+    if (this._userRankComponent) {
+      remove(this._userRankComponent);
+    }
+    this._userRankComponent = new UserRankComponent(films);
+    render(siteHeader, this._userRankComponent, RenderPosition.BEFOREEND);
+  }
+
   _updateFilms() {
     this._containerClass = `.films`;
     const siteFilmsListSection = this._siteMain.querySelector(this._containerClass);
@@ -129,6 +142,7 @@ class PageController {
 
     this._removeFilms();
     this._renderFilmCards(siteFilmsListSection, sortedFilms, 0, SHOWING_FILMS_COUNT_ON_START, this._onDataChange, this._onViewChange, this._api);
+    this._renderUserRank(sortedFilms);
     remove(this._moreButton);
     this._renderShowMoreButton(siteFilmsListSection, sortedFilms);
     this._renderExtraBlocks(sortedFilms, siteFilmsListSection);
