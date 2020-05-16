@@ -30,31 +30,13 @@ class MovieController {
     this._onEscBtnPressed = this._onEscBtnPressed.bind(this);
   }
 
-  _onCloseFilmDetailsPopup() {
-    removeChild(this._siteMain, this._filmDetailsPopupComponent);
-    this._mode = Mode.DEFAULT;
-
-    this._filmDetailsPopupComponent.removeClickHandler(() => {
-      this._onCloseFilmDetailsPopup();
-    });
-
-    document.removeEventListener(`keydown`, this._onEscBtnPressed);
-  }
-
-  _onEscBtnPressed(evt) {
-    if (evt.key === Keys.ESC_KEY) {
-      this._onCloseFilmDetailsPopup();
-      this._updateFilm();
-    }
-  }
-
   render(film) {
     const oldFilmComponent = this._filmCardComponent;
     const oldFilmPopupComponent = this._filmDetailsPopupComponent;
     this._filmCardComponent = new FilmCardComponent(film);
     this._filmDetailsPopupComponent = new FilmDetailsPopupComponent(film);
     this._commentsModel = new CommentsModel();
-    this._commentsModel.setComments(film);
+    this._commentsModel.set(film);
 
     const onFilmClick = () => {
       if (this._filmDetailsPopupComponent) {
@@ -149,7 +131,7 @@ class MovieController {
   _updateFilm() {
     filmsToUpdate.forEach((movie) => {
       const newFilm = FilmModel.clone(movie.film);
-      newFilm.comments = movie.commentsModel.getComments(movie.film);
+      newFilm.comments = movie.commentsModel.get(movie.film);
       this._onDataChange(this, movie.film, newFilm);
     });
     filmsToUpdate = [];
@@ -172,6 +154,24 @@ class MovieController {
     render(commentsSection, this._commentBoardComponent, RenderPosition.BEFOREEND);
     this._commentBoardComponent.renderAllComments();
     this._commentBoardComponent.addNewCommentHandler();
+  }
+
+  _onCloseFilmDetailsPopup() {
+    removeChild(this._siteMain, this._filmDetailsPopupComponent);
+    this._mode = Mode.DEFAULT;
+
+    this._filmDetailsPopupComponent.removeClickHandler(() => {
+      this._onCloseFilmDetailsPopup();
+    });
+
+    document.removeEventListener(`keydown`, this._onEscBtnPressed);
+  }
+
+  _onEscBtnPressed(evt) {
+    if (evt.key === Keys.ESC_KEY) {
+      this._onCloseFilmDetailsPopup();
+      this._updateFilm();
+    }
   }
 }
 

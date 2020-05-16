@@ -27,7 +27,7 @@ const siteFooter = document.querySelector(`.footer`);
 const siteFooterStatiscticsSection = siteFooter.querySelector(`.footer__statistics`);
 
 const renderMainBlocks = (filmCards) => {
-  moviesModel.setMovies(filmCards);
+  moviesModel.set(filmCards);
   filterController.render();
   pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
   render(siteFooterStatiscticsSection, footerStatsComponent, RenderPosition.BEFOREEND);
@@ -62,9 +62,7 @@ apiWithProvider.getMovies()
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
     .then(() => {
-      // Действие, в случае успешной регистрации ServiceWorker
     }).catch(() => {
-      // Действие, в случае ошибки при регистрации ServiceWorker
     });
 });
 
@@ -74,5 +72,5 @@ window.addEventListener(`online`, () => {
   apiWithProvider.sync();
 });
 window.addEventListener(`offline`, () => {
-  document.title += ` [offline]`;
+  document.title = document.title.concat(` [offline]`);
 });

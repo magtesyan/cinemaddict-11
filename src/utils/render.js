@@ -48,8 +48,8 @@ const replace = (newComponent, oldComponent) => {
   }
 };
 
-const filmDuration = (duration) => {
+const formatFilmDuration = (duration) => {
   return `${moment.duration(duration, `m`).hours()}h ${moment.duration(duration, `m`).minutes()}m`;
 };
 
-export {RenderPosition, render, createElement, remove, appendChild, removeChild, replace, filmDuration};
+export {RenderPosition, render, createElement, remove, appendChild, removeChild, replace, formatFilmDuration};

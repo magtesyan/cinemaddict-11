@@ -1,13 +1,13 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {filmDuration} from "../utils/render";
+import {formatFilmDuration} from "../utils/render";
 import moment from "moment";
 
 const createFilmDetailsPopupTemplate = (filmCard) => {
   const {name, originalName, rating, date, duration, genre, poster, description, ageLimit, director, writer, actor, country, addToWatchList, alreadyWatched, addToFavorites} = filmCard;
-  const formattedDuration = filmDuration(duration);
+  const formattedDuration = formatFilmDuration(duration);
 
   const genreBlock = Array.from(genre).reduce((block, current) => {
-    block += `<span class="film-details__genre">${current}</span>\n`;
+    block = block.concat(`<span class="film-details__genre">${current}</span>\n`);
     return block;
   }, ``);
 

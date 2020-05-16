@@ -34,7 +34,7 @@ class Provider {
 
     const storeFilms = Object.values(this._store.getItems());
 
-    return Promise.resolve(Film.parseFilms(storeFilms));
+    return Promise.resolve(Film.parseMovies(storeFilms));
   }
 
   updateFilm(filmId, data) {

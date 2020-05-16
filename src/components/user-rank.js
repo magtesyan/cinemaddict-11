@@ -1,8 +1,8 @@
 import AbstractComponent from "./abstract-component.js";
-import {userLevel} from "../utils/filter.js";
+import {getUserLevel} from "../utils/filter.js";
 
 const createUserRankBlock = (films) => {
-  const userRank = userLevel(films);
+  const userRank = getUserLevel(films);
 
   return userRank !== `` ? (
     `<p class="profile__rating">${userRank}</p>

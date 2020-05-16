@@ -34,7 +34,7 @@ const getFilmsByFilter = (films, filterType) => {
   return films;
 };
 
-const userLevel = (films) => {
+const getUserLevel = (films) => {
   let userRank = UserLevels[`21`];
   const watchedFilmsCount = films ? films.filter((film) => film.alreadyWatched === true).length : 0;
 
@@ -48,4 +48,4 @@ const userLevel = (films) => {
   return userRank;
 };
 
-export {getFilmsByFilter, userLevel};
+export {getFilmsByFilter, getUserLevel};

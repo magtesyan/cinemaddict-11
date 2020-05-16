@@ -55,12 +55,12 @@ class Film {
     };
   }
 
-  static parseFilm(data) {
+  static parseMovie(data) {
     return new Film(data);
   }
 
-  static parseFilms(data) {
-    return data.map(Film.parseFilm);
+  static parseMovies(data) {
+    return data.map(Film.parseMovie);
   }
 
   static clone(data) {

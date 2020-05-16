@@ -1,12 +1,12 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {filmDuration} from "../utils/render.js";
+import {formatFilmDuration} from "../utils/render.js";
 import {getMaxValueKeyFromObject} from "../utils/common.js";
-import {userLevel} from "../utils/filter.js";
+import {getUserLevel} from "../utils/filter.js";
 
 const createUserRankBlock = (films) => {
-  const userRank = userLevel(films);
+  const userRank = getUserLevel(films);
 
   return userRank !== `` ? (
     `<p class="statistic__rank">
@@ -29,7 +29,7 @@ const createStatisticsTemplate = (films, topGenre, Periods) => {
   const periodsMarkup = Object.keys(Periods).map((it) => createPeriodsMarkup(it, Periods[it])).join(`\n`);
   const filmsCount = films ? films.length : 0;
 
-  const totalDuration = films ? filmDuration(films.reduce((a, b) => {
+  const totalDuration = films ? formatFilmDuration(films.reduce((a, b) => {
     return a + b.duration;
   }, 0)) : 0;
 

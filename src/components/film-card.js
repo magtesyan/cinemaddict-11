@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {filmDuration} from "../utils/render";
+import {formatFilmDuration} from "../utils/render";
 
 const SHORT_DESCRIPTION_LENGTH = 140;
 
@@ -10,8 +10,8 @@ const setControlItemActive = (item) => {
 const createFilmCardTemplate = (filmCard) => {
   const {name, rating, year, duration, genre, poster, description, comments, addToWatchList, alreadyWatched, addToFavorites} = filmCard;
   const commentsLength = comments ? comments.length : 0;
-  const filmCardDuration = filmDuration(duration);
-  const cutDescription = description.length < SHORT_DESCRIPTION_LENGTH ? description : description.substr(0, SHORT_DESCRIPTION_LENGTH - 1) + `...`;
+  const filmCardDuration = formatFilmDuration(duration);
+  const cutDescription = description.length < SHORT_DESCRIPTION_LENGTH ? description : `${description.substr(0, SHORT_DESCRIPTION_LENGTH - 1)}...`;
 
   return (
     `<article class="film-card">
