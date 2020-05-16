@@ -5,6 +5,8 @@ import {FilterType} from "../const.js";
 import StatisticsComponent from "../components/stats.js";
 import moment from "moment";
 
+const DAYS_IN_WEEK = 7;
+
 class FilterController {
   constructor(container, moviesModel, pageController) {
     this.pageController = pageController;
@@ -31,12 +33,12 @@ class FilterController {
 
   render() {
     const container = this._container;
-    const allFilms = this._moviesModel.getMoviesAll();
+    const allFilms = this._moviesModel.getAll();
 
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
-        count: getFilmsByFilter(allFilms, filterType).length,
+        count: getFilmsByFilter(allFilms, filterType) ? getFilmsByFilter(allFilms, filterType).length : 0,
         checked: filterType === this._activeFilterType,
       };
     });
@@ -51,11 +53,19 @@ class FilterController {
       render(container, this._menuComponent, RenderPosition.BEFOREEND);
     }
 
-    this._watchedFilms = this._moviesModel.getMoviesAll().filter((movies) => movies.alreadyWatched === true);
+    this._watchedFilms = this._moviesModel.getAll() ? this._moviesModel.getAll().filter((movies) => movies.alreadyWatched === true) : undefined;
     this._statisticsComponent = new StatisticsComponent(this._watchedFilms, this.Periods);
     render(this._container, this._statisticsComponent, RenderPosition.BEFOREEND);
     this._statisticsComponent.setPeriodChangeHandler(this._onStatsPeriodChangeHandler);
     this._statisticsComponent.hide();
+  }
+
+  _resetPeriods() {
+    for (let period in this.Periods) {
+      if (Object.prototype.hasOwnProperty.call(this.Periods, period)) {
+        this.Periods[period] = false;
+      }
+    }
   }
 
   _onFilterChange(filterType) {
@@ -78,18 +88,10 @@ class FilterController {
     this.render();
   }
 
-  _resetPeriods() {
-    for (let period in this.Periods) {
-      if (Object.prototype.hasOwnProperty.call(this.Periods, period)) {
-        this.Periods[period] = false;
-      }
-    }
-  }
-
   _onStatsPeriodChangeHandler(evt) {
     const today = new Date();
     let filteredFilms;
-    this._watchedFilms = this._moviesModel.getMoviesAll().filter((movies) => movies.alreadyWatched === true);
+    this._watchedFilms = this._moviesModel.getAll().filter((movies) => movies.alreadyWatched === true);
 
     switch (evt.target.value) {
       case `today`:
@@ -98,7 +100,7 @@ class FilterController {
         this.Periods[`Today`] = true;
         break;
       case `week`:
-        filteredFilms = this._watchedFilms.filter((film) => moment(film.watchingDate).isAfter(today.setDate(today.getDate() - 7)));
+        filteredFilms = this._watchedFilms.filter((film) => moment(film.watchingDate).isAfter(today.setDate(today.getDate() - DAYS_IN_WEEK)));
         this._resetPeriods();
         this.Periods[`Week`] = true;
         break;

@@ -2,7 +2,7 @@ class Comment {
   constructor(data) {
     this.id = data[`id`];
     this.text = data[`comment`];
-    this.emoji = data[`emotion`] + `.png`;
+    this.emoji = `${data[`emotion`]}.png`;
     this.author = data[`author`];
     this.date = new Date(data[`date`]);
   }
@@ -16,12 +16,12 @@ class Comment {
     };
   }
 
-  static parseComment(data) {
+  static parse(data) {
     return new Comment(data);
   }
 
-  static parseComments(data) {
-    return data.map(Comment.parseComment);
+  static parseReviews(data) {
+    return data.map(Comment.parse);
   }
 
   static clone(data) {

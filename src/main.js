@@ -5,9 +5,8 @@ import MoviesModel from "./models/movies.js";
 import PageController from "./controllers/page.js";
 import Provider from "./api/provider.js";
 import Store from "./api/store.js";
-import UserRankComponent from "./components/user-rank.js";
 import {SHOWING_FILMS_COUNT_ON_START} from "./const.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic eo0w590ik29777b=`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
@@ -20,7 +19,6 @@ const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const moviesModel = new MoviesModel();
 
-const siteHeader = document.querySelector(`.header`);
 const siteMain = document.querySelector(`.main`);
 const pageController = new PageController(`.films-list`, moviesModel, apiWithProvider);
 const filterController = new FilterController(siteMain, moviesModel, pageController);
@@ -28,7 +26,15 @@ const filterController = new FilterController(siteMain, moviesModel, pageControl
 const siteFooter = document.querySelector(`.footer`);
 const siteFooterStatiscticsSection = siteFooter.querySelector(`.footer__statistics`);
 
-render(siteHeader, new UserRankComponent(), RenderPosition.BEFOREEND);
+const renderMainBlocks = (filmCards) => {
+  moviesModel.set(filmCards);
+  filterController.render();
+  pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
+  render(siteFooterStatiscticsSection, footerStatsComponent, RenderPosition.BEFOREEND);
+};
+
+let footerStatsComponent = new FooterStatsComponent([]);
+renderMainBlocks();
 
 apiWithProvider.getMovies()
   .then((filmCards) => {
@@ -47,19 +53,16 @@ apiWithProvider.getMovies()
             }));
     });
     Promise.all(fetches).then(() => {
-      moviesModel.setMovies(filmCards);
-      filterController.render();
-      pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
-      render(siteFooterStatiscticsSection, new FooterStatsComponent(filmCards), RenderPosition.BEFOREEND);
+      remove(footerStatsComponent);
+      footerStatsComponent = new FooterStatsComponent(filmCards);
+      renderMainBlocks(filmCards);
     });
   });
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
     .then(() => {
-      // Действие, в случае успешной регистрации ServiceWorker
     }).catch(() => {
-      // Действие, в случае ошибки при регистрации ServiceWorker
     });
 });
 
@@ -69,5 +72,5 @@ window.addEventListener(`online`, () => {
   apiWithProvider.sync();
 });
 window.addEventListener(`offline`, () => {
-  document.title += ` [offline]`;
+  document.title = document.title.concat(` [offline]`);
 });

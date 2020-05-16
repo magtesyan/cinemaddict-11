@@ -9,11 +9,11 @@ class Movies {
     this._filterChangeHandlers = [];
   }
 
-  getMovies() {
+  get() {
     return getFilmsByFilter(this._films, this._activeFilterType);
   }
 
-  getMoviesAll() {
+  getAll() {
     return this._films;
   }
 
@@ -27,7 +27,7 @@ class Movies {
     return true;
   }
 
-  setMovies(films) {
+  set(films) {
     this._films = films;
   }
 

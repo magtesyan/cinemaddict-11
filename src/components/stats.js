@@ -1,8 +1,21 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {filmDuration} from "../utils/render.js";
+import {formatFilmDuration} from "../utils/render.js";
 import {getMaxValueKeyFromObject} from "../utils/common.js";
+import {getUserLevel} from "../utils/filter.js";
+
+const createUserRankBlock = (films) => {
+  const userRank = getUserLevel(films);
+
+  return userRank !== `` ? (
+    `<p class="statistic__rank">
+      Your rank
+      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+      <span class="statistic__rank-label">${userRank}</span>
+    </p>`
+  ) : ``;
+};
 
 const createPeriodsMarkup = (period, isActive) => {
   const periodInTags = period.toLowerCase().replace(` `, `-`);
@@ -14,19 +27,18 @@ const createPeriodsMarkup = (period, isActive) => {
 
 const createStatisticsTemplate = (films, topGenre, Periods) => {
   const periodsMarkup = Object.keys(Periods).map((it) => createPeriodsMarkup(it, Periods[it])).join(`\n`);
-  const filmsCount = films.length;
+  const filmsCount = films ? films.length : 0;
 
-  const totalDuration = filmDuration(films.reduce((a, b) => {
+  const totalDuration = films ? formatFilmDuration(films.reduce((a, b) => {
     return a + b.duration;
-  }, 0));
+  }, 0)) : 0;
+
+  const userRankBlock = createUserRankBlock(films);
 
   return (
     `<section class="statistic">
     <p class="statistic__rank">
-      Your rank
-      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Sci-Fighter</span>
-    </p>
+      ${userRankBlock}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
@@ -146,11 +158,13 @@ class Statistics extends AbstractSmartComponent {
 
   _shareGenresByQuantity(films) {
     let sortedGenres = {};
-    films.forEach((film) => {
-      film.genre.forEach((genre) => {
-        sortedGenres[genre] = sortedGenres[genre] ? sortedGenres[genre] + 1 : 1;
+    if (films) {
+      films.forEach((film) => {
+        film.genre.forEach((genre) => {
+          sortedGenres[genre] = sortedGenres[genre] ? sortedGenres[genre] + 1 : 1;
+        });
       });
-    });
+    }
     return sortedGenres;
   }
 

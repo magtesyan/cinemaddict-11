@@ -3,11 +3,11 @@ class Comments {
     this._comments = [];
   }
 
-  getComments() {
+  get() {
     return this._comments;
   }
 
-  setComments(film) {
+  set(film) {
     this._comments = film.comments;
   }
 

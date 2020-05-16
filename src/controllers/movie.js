@@ -27,21 +27,7 @@ class MovieController {
     this._filmCardComponent = null;
     this.commentsBoardComponent = null;
     this.commentComponent = null;
-  }
-
-  _onCloseFilmDetailsPopup() {
-    removeChild(this._siteMain, this._filmDetailsPopupComponent);
-    this._mode = Mode.DEFAULT;
-
-    this._filmDetailsPopupComponent.removeClickHandler(() => {
-      this._onCloseFilmDetailsPopup();
-    });
-
-    document.removeEventListener(`keydown`, (evt) => {
-      if (evt.key === Keys.ESC_KEY) {
-        this._onCloseFilmDetailsPopup();
-      }
-    });
+    this._onEscBtnPressed = this._onEscBtnPressed.bind(this);
   }
 
   render(film) {
@@ -50,9 +36,9 @@ class MovieController {
     this._filmCardComponent = new FilmCardComponent(film);
     this._filmDetailsPopupComponent = new FilmDetailsPopupComponent(film);
     this._commentsModel = new CommentsModel();
-    this._commentsModel.setComments(film);
+    this._commentsModel.set(film);
 
-    const onPosterClick = () => {
+    const onFilmClick = () => {
       if (this._filmDetailsPopupComponent) {
         remove(this._filmDetailsPopupComponent);
       }
@@ -76,12 +62,7 @@ class MovieController {
         this._updateFilm();
       });
 
-      document.addEventListener(`keydown`, (evt) => {
-        if (evt.key === Keys.ESC_KEY) {
-          this._onCloseFilmDetailsPopup(film);
-          this._updateFilm();
-        }
-      });
+      document.addEventListener(`keydown`, this._onEscBtnPressed);
 
       this._filmDetailsPopupComponent.setWatchlistButtonClickHandler(() => {
         const newFilm = FilmModel.clone(film);
@@ -121,7 +102,9 @@ class MovieController {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
 
-    this._filmCardComponent.setClickHandler(onPosterClick);
+    this._filmCardComponent.setPosterClickHandler(onFilmClick);
+    this._filmCardComponent.setTitleClickHandler(onFilmClick);
+    this._filmCardComponent.setCommentsClickHandler(onFilmClick);
 
     this._filmCardComponent.setWatchlistButtonClickHandler(() => {
       const newFilm = FilmModel.clone(film);
@@ -148,7 +131,7 @@ class MovieController {
   _updateFilm() {
     filmsToUpdate.forEach((movie) => {
       const newFilm = FilmModel.clone(movie.film);
-      newFilm.comments = movie.commentsModel.getComments(movie.film);
+      newFilm.comments = movie.commentsModel.get(movie.film);
       this._onDataChange(this, movie.film, newFilm);
     });
     filmsToUpdate = [];
@@ -171,6 +154,24 @@ class MovieController {
     render(commentsSection, this._commentBoardComponent, RenderPosition.BEFOREEND);
     this._commentBoardComponent.renderAllComments();
     this._commentBoardComponent.addNewCommentHandler();
+  }
+
+  _onCloseFilmDetailsPopup() {
+    removeChild(this._siteMain, this._filmDetailsPopupComponent);
+    this._mode = Mode.DEFAULT;
+
+    this._filmDetailsPopupComponent.removeClickHandler(() => {
+      this._onCloseFilmDetailsPopup();
+    });
+
+    document.removeEventListener(`keydown`, this._onEscBtnPressed);
+  }
+
+  _onEscBtnPressed(evt) {
+    if (evt.key === Keys.ESC_KEY) {
+      this._onCloseFilmDetailsPopup();
+      this._updateFilm();
+    }
   }
 }
 

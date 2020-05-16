@@ -1,5 +1,7 @@
 import {MONTHS, DAYS_IN_MONTH, MONTHS_IN_YEAR} from "../const.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min + 1));
 };
@@ -25,14 +27,6 @@ const formatDate = (date) => {
   return formattedDate.replace(month, MONTHS[month]);
 };
 
-const makeSet = (array) => {
-  let newSet = new Set();
-  for (let i = 0; i <= getRandomIntegerNumber(1, 3); i++) {
-    newSet.add(getRandomArrayItem(array));
-  }
-  return newSet;
-};
-
 const getMaxValueKeyFromObject = (obj) => {
   const maxValue = Math.max(...Object.values(obj));
   const topKeys = Object.keys(obj).filter((it) => obj[it] === maxValue);
@@ -41,8 +35,6 @@ const getMaxValueKeyFromObject = (obj) => {
 };
 
 const shake = (element) => {
-  const SHAKE_ANIMATION_TIMEOUT = 600;
-
   element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
 
   setTimeout(() => {
@@ -54,4 +46,4 @@ const isOnline = () => {
   return window.navigator.onLine;
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, makeSet, getMaxValueKeyFromObject, shake, isOnline};
+export {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatDate, getMaxValueKeyFromObject, shake, isOnline};

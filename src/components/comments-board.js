@@ -17,10 +17,10 @@ const createEmojiesListMarkup = (selectedEmoji) => {
 
   Emojies.forEach((emoji) => {
     const checked = selectedEmoji === emoji ? `checked` : ``;
-    markup += `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${checked}>
+    markup = markup.concat(`<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${checked}>
     <label class="film-details__emoji-label" for="emoji-${emoji}">
       <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="${emoji}">
-    </label>`;
+    </label>`);
   });
 
   return markup;
@@ -56,7 +56,7 @@ const createCommentsTemplate = (comments, emoji, userComment) => {
 class CommentsBoard extends AbstractSmartComponent {
   constructor(commentsModel, emoji, api, film) {
     super();
-    this._comments = commentsModel.getComments();
+    this._comments = commentsModel.get();
     this._emoji = emoji;
     this._userComment = ``;
     this._commentsModel = commentsModel;
@@ -75,7 +75,7 @@ class CommentsBoard extends AbstractSmartComponent {
 
   renderAllComments() {
     const commentItem = this.getElement().querySelector(`.film-details__comments-list`);
-    this._comments = this._commentsModel.getComments();
+    this._comments = this._commentsModel.get();
 
     this._comments.forEach((comment) => {
       const commentController = new CommentController(commentItem, this._commentsModel, this, this._api);
@@ -84,7 +84,7 @@ class CommentsBoard extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._comments = this._commentsModel.getComments();
+    this._comments = this._commentsModel.get();
     super.rerender();
     this.renderAllComments();
   }
@@ -112,14 +112,14 @@ class CommentsBoard extends AbstractSmartComponent {
         if (this._emoji && this._userComment) {
           const newComment = {
             comment: this._userComment,
-            emotion: this._emoji + `.png`,
+            emotion: `${this._emoji}.png`,
             date: new Date(),
           };
           const convertedComment = new CommentModel(newComment);
           this._api.createComment(this._filmId, convertedComment.toRAW())
           .then(() => this._api.getComments(this._filmId))
           .then((comments) => {
-            convertedComment.emoji = convertedComment.emoji + `.png`;
+            convertedComment.emoji = `${convertedComment.emoji}.png`;
             convertedComment.author = comments[comments.length - 1].author;
             convertedComment.id = comments[comments.length - 1].id;
             this._commentsModel.onAddComment(convertedComment);

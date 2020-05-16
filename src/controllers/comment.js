@@ -27,6 +27,7 @@ class CommentController {
       })
       .catch(() => {
         evt.target.classList.remove(`disabled`);
+        evt.target.textContent = `Deleting`;
         shake(evt.target.parentNode.parentNode.parentNode);
       });
     });
