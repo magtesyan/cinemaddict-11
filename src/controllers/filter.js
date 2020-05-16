@@ -36,7 +36,7 @@ class FilterController {
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
-        count: getFilmsByFilter(allFilms, filterType).length,
+        count: getFilmsByFilter(allFilms, filterType) ? getFilmsByFilter(allFilms, filterType).length : 0,
         checked: filterType === this._activeFilterType,
       };
     });
@@ -51,7 +51,7 @@ class FilterController {
       render(container, this._menuComponent, RenderPosition.BEFOREEND);
     }
 
-    this._watchedFilms = this._moviesModel.getMoviesAll().filter((movies) => movies.alreadyWatched === true);
+    this._watchedFilms = this._moviesModel.getMoviesAll() ? this._moviesModel.getMoviesAll().filter((movies) => movies.alreadyWatched === true) : undefined;
     this._statisticsComponent = new StatisticsComponent(this._watchedFilms, this.Periods);
     render(this._container, this._statisticsComponent, RenderPosition.BEFOREEND);
     this._statisticsComponent.setPeriodChangeHandler(this._onStatsPeriodChangeHandler);

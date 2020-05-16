@@ -6,7 +6,7 @@ import PageController from "./controllers/page.js";
 import Provider from "./api/provider.js";
 import Store from "./api/store.js";
 import {SHOWING_FILMS_COUNT_ON_START} from "./const.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic eo0w590ik29777b=`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
@@ -26,6 +26,16 @@ const filterController = new FilterController(siteMain, moviesModel, pageControl
 const siteFooter = document.querySelector(`.footer`);
 const siteFooterStatiscticsSection = siteFooter.querySelector(`.footer__statistics`);
 
+const renderMainBlocks = (filmCards) => {
+  moviesModel.setMovies(filmCards);
+  filterController.render();
+  pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
+  render(siteFooterStatiscticsSection, footerStatsComponent, RenderPosition.BEFOREEND);
+};
+
+let footerStatsComponent = new FooterStatsComponent([]);
+renderMainBlocks();
+
 apiWithProvider.getMovies()
   .then((filmCards) => {
     return filmCards;
@@ -43,10 +53,9 @@ apiWithProvider.getMovies()
             }));
     });
     Promise.all(fetches).then(() => {
-      moviesModel.setMovies(filmCards);
-      filterController.render();
-      pageController.render(0, SHOWING_FILMS_COUNT_ON_START);
-      render(siteFooterStatiscticsSection, new FooterStatsComponent(filmCards), RenderPosition.BEFOREEND);
+      remove(footerStatsComponent);
+      footerStatsComponent = new FooterStatsComponent(filmCards);
+      renderMainBlocks(filmCards);
     });
   });
 

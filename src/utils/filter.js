@@ -8,15 +8,15 @@ const UserLevels = {
 };
 
 const getWatchlistFilms = (films) => {
-  return films.filter((film) => film.addToWatchList);
+  return films ? films.filter((film) => film.addToWatchList) : films;
 };
 
 const getHistoryFilms = (films) => {
-  return films.filter((film) => film.alreadyWatched);
+  return films ? films.filter((film) => film.alreadyWatched) : films;
 };
 
 const getFavoriteFilms = (films) => {
-  return films.filter((film) => film.addToFavorites);
+  return films ? films.filter((film) => film.addToFavorites) : films;
 };
 
 const getFilmsByFilter = (films, filterType) => {
@@ -36,7 +36,7 @@ const getFilmsByFilter = (films, filterType) => {
 
 const userLevel = (films) => {
   let userRank = UserLevels[`21`];
-  const watchedFilmsCount = films.filter((film) => film.alreadyWatched === true).length;
+  const watchedFilmsCount = films ? films.filter((film) => film.alreadyWatched === true).length : 0;
 
   for (let i = 0; i < Object.keys(UserLevels).length; i++) {
     if (watchedFilmsCount <= parseInt(Object.keys(UserLevels)[i], 10)) {

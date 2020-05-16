@@ -3,12 +3,19 @@ import AbstractComponent from "./abstract-component.js";
 const createFilmsTemplate = (films) => {
   const TitleText = {
     NO_MOVIES: `There are no movies in our database`,
-    THERE_ARE_MOVIES: `All movies. Upcoming`
+    THERE_ARE_MOVIES: `All movies. Upcoming`,
+    LOADING: `Loading...`,
   };
 
-  const filmsListTitle = films.length ? TitleText.THERE_ARE_MOVIES : TitleText.NO_MOVIES;
-  const filmsListTitleClass = films.length ? `visually-hidden` : ``;
-  const filmsListContainerMarkup = films.length ? `<div class="films-list__container"></div>` : ``;
+  let filmsListTitle = TitleText.LOADING;
+  let filmsListTitleClass = ``;
+  let filmsListContainerMarkup = ``;
+
+  if (films) {
+    filmsListTitle = films.length ? TitleText.THERE_ARE_MOVIES : TitleText.NO_MOVIES;
+    filmsListTitleClass = films.length ? `visually-hidden` : ``;
+    filmsListContainerMarkup = films.length ? `<div class="films-list__container"></div>` : ``;
+  }
 
   return (
     `<section class="films">

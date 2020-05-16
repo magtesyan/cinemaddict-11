@@ -27,11 +27,11 @@ const createPeriodsMarkup = (period, isActive) => {
 
 const createStatisticsTemplate = (films, topGenre, Periods) => {
   const periodsMarkup = Object.keys(Periods).map((it) => createPeriodsMarkup(it, Periods[it])).join(`\n`);
-  const filmsCount = films.length;
+  const filmsCount = films ? films.length : 0;
 
-  const totalDuration = filmDuration(films.reduce((a, b) => {
+  const totalDuration = films ? filmDuration(films.reduce((a, b) => {
     return a + b.duration;
-  }, 0));
+  }, 0)) : 0;
 
   const userRankBlock = createUserRankBlock(films);
 
@@ -158,11 +158,13 @@ class Statistics extends AbstractSmartComponent {
 
   _shareGenresByQuantity(films) {
     let sortedGenres = {};
-    films.forEach((film) => {
-      film.genre.forEach((genre) => {
-        sortedGenres[genre] = sortedGenres[genre] ? sortedGenres[genre] + 1 : 1;
+    if (films) {
+      films.forEach((film) => {
+        film.genre.forEach((genre) => {
+          sortedGenres[genre] = sortedGenres[genre] ? sortedGenres[genre] + 1 : 1;
+        });
       });
-    });
+    }
     return sortedGenres;
   }
 
