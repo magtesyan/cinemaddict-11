@@ -1,6 +1,8 @@
 import AbstractComponent from "./abstract-component.js";
 import {filmDuration} from "../utils/render";
 
+const SHORT_DESCRIPTION_LENGTH = 140;
+
 const setControlItemActive = (item) => {
   return item ? `film-card__controls-item--active` : ``;
 };
@@ -9,6 +11,7 @@ const createFilmCardTemplate = (filmCard) => {
   const {name, rating, year, duration, genre, poster, description, comments, addToWatchList, alreadyWatched, addToFavorites} = filmCard;
   const commentsLength = comments ? comments.length : 0;
   const filmCardDuration = filmDuration(duration);
+  const cutDescription = description.length < SHORT_DESCRIPTION_LENGTH ? description : description.substr(0, SHORT_DESCRIPTION_LENGTH - 1) + `...`;
 
   return (
     `<article class="film-card">
@@ -20,7 +23,7 @@ const createFilmCardTemplate = (filmCard) => {
         <span class="film-card__genre">${Array.from(genre)[0]}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${cutDescription}</p>
       <a class="film-card__comments">${commentsLength} comments</a>
       <form class="film-card__controls">
         <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${setControlItemActive(addToWatchList)}">Add to watchlist</button>
