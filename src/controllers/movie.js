@@ -128,6 +128,14 @@ class MovieController {
     });
   }
 
+  renderCommentsBoard(film) {
+    const commentsSection = this._siteMain.querySelector(`.form-details__bottom-container`);
+    this._commentBoardComponent = new CommentsBoardComponent(this._commentsModel, film.emoji, this._api, film);
+    render(commentsSection, this._commentBoardComponent, RenderPosition.BEFOREEND);
+    this._commentBoardComponent.renderAllComments();
+    this._commentBoardComponent.addNewCommentHandler();
+  }
+
   _updateFilm() {
     filmsToUpdate.forEach((movie) => {
       const newFilm = FilmModel.clone(movie.film);
@@ -146,14 +154,6 @@ class MovieController {
     if (this._mode !== Mode.DEFAULT) {
       this._onCloseFilmDetailsPopup();
     }
-  }
-
-  renderCommentsBoard(film) {
-    const commentsSection = this._siteMain.querySelector(`.form-details__bottom-container`);
-    this._commentBoardComponent = new CommentsBoardComponent(this._commentsModel, film.emoji, this._api, film);
-    render(commentsSection, this._commentBoardComponent, RenderPosition.BEFOREEND);
-    this._commentBoardComponent.renderAllComments();
-    this._commentBoardComponent.addNewCommentHandler();
   }
 
   _onCloseFilmDetailsPopup() {

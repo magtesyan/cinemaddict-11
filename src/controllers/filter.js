@@ -2,7 +2,7 @@ import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
 import MenuComponent from "../components/menu.js";
 import {FilterType} from "../const.js";
-import StatisticsComponent from "../components/stats.js";
+import StatisticsComponent from "../components/statistics.js";
 import moment from "moment";
 
 const DAYS_IN_WEEK = 7;
